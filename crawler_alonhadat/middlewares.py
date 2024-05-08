@@ -7,6 +7,7 @@ from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+from scrapy.exceptions import CloseSpider
 
 
 class CrawlerAlonhadatSpiderMiddleware:
@@ -101,3 +102,11 @@ class CrawlerAlonhadatDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
+
+
+
+class CheckAuthenticationCloseSpider:
+    def process_response(self, request, response, spider):
+        if "xac-thuc-nguoi-dung.html" in response.url:
+            raise CloseSpider("Authentication required")
+        return response

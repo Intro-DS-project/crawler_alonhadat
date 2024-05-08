@@ -11,20 +11,8 @@ from itemadapter import ItemAdapter
 class CrawlerAlonhadatPipeline:
     def process_item(self, item, spider):
         # Thực hiện xử lý dữ liệu cho mỗi item ở đây
-        self.convert_item_values(item)
-        return item
+        pass
 
-    def convert_item_values(self, item):
-        def convert_value(value):
-            if value == "/publish/img/check.gif":
-                return 1
-            elif value is None or value == "_" or value == "---":
-                return 0
-            else:
-                return value
-
-        for key in item:
-            item[key] = convert_value(item[key])
 
 
 
