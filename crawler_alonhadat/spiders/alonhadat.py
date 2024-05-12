@@ -7,6 +7,7 @@ from hanoikovoidcdau import standardize
 from crawler_alonhadat.remote_database import init
 import random
 
+today = date.today().strftime("%d/%m/%Y")
 user_agents = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
@@ -32,7 +33,7 @@ class AlonhadatSpider(scrapy.Spider):
 
 
       def parse_link(self, response):
-            for i in range(1, 20):
+            for i in range(1, 21):
                   str = '#left > div.content-items > div:nth-child({}) > div.ct_title_box > div.ct_title > a::attr(href)'.format(i)
                   link = response.css(str).extract_first()
                   link = 'https://alonhadat.com.vn/' + link
@@ -77,7 +78,9 @@ class AlonhadatSpider(scrapy.Spider):
             item["current_floor"] = current_floor
             item["direction"] = direction
             item["street_width"] = street_width
-            data, count = self.supabase.table("entries").insert(item.to_dict()).execute()
+            # nếu post_dâte là hôm nay hoặc hôm qua thì mới lấy thông tin
+            if item['post_date'] == today:
+                  data, count = self.supabase.table("entries").insert(item.to_dict()).execute()
       
             yield item
 
