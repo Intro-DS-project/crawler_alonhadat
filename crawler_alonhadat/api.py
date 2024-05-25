@@ -20,14 +20,16 @@ def extract_description(description):
         current_floor (phòng trọ ở tầng mấy), direction (hướng nhà, 1 trong 4 giá trị Đông/Tây/Nam/Bắc), \
         street_width (số thực, theo mét). \
         Trường nào không xuất hiện thì để là 0.\
-        Trường direction không xuất hiện thì để là rỗng.\
         Các trường thông tin ngăn cách bởi dấu phẩy.\
-        Ví dụ: \"0,0,1,1,0,0,Đông,0\", hoặc \"1,0,1,1,0,0,,0\" nếu không có direction."
+        Ví dụ: \"0,0,1,1,0,0,Đông,0\", hoặc \"1,0,1,1,0,0,0,0\" nếu không có direction."
 
     response = model.generate_content(prompt)
     return response.text
 
+    response = model.generate_content(prompt)
+    return response.text
 
-str = "Cho nữ thuê phòng khép kín tại phố Dương Văn Bé, cạnh Time City, quận Hai Bà trưng, diện tích 20 m2/1 phòng, nhà mới xây thiết bị mới hiện đại vào ở ngay. Cạnh trường, chợ, tiện đi lại, có sân để xe. Giá 3 triệu/tháng."
+str = "Cho thuê phòng khép kín full nội thất tại Chính Kinh giá từ 5-6 triệu.\r\nChính chủ cần cho thuê phòng trọ tại Chính Kinh, ngay ga tàu điện Thượng Đình.\r\nDiện tích 25-30m2 full nội thất, điều hòa, nóng lạnh, tủ lạnh, máy giặt riêng\r\nThang máy, khóa cửa vân tay, giờ giấc tự do.\r\nGiá từ 5 đến 6 triệu.\r\nLiên hệ xem nhà mr Điệp O379 28 3456.\r\nCảm ơn quý khách đã xem tin."
 
-extract_description(str)
+# extract_description(str)
+print(extract_description(str))

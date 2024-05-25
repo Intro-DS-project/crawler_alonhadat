@@ -8,11 +8,11 @@ from crawler_alonhadat.remote_database import init
 import random
 
 today = date.today().strftime("%d/%m/%Y")
-user_agents = [
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
-    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36'
-]
+# user_agents = [
+#     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+#     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
+#     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36'
+# ]
 
 class AlonhadatSpider(scrapy.Spider):
       name = 'alonhadat'
@@ -22,13 +22,12 @@ class AlonhadatSpider(scrapy.Spider):
 
       def start_requests(self):
             pages = []
-            for i in range(1,3):
+            for i in range(50,53):
                   domain = 'https://alonhadat.com.vn/nha-dat/cho-thue/phong-tro-nha-tro/1/ha-noi/trang--{}.html'.format(i)
                   pages.append(domain)
 
             for page in pages:
-                  user_agent = random.choice(user_agents)
-                  yield scrapy.Request(url=page, callback=self.parse_link, headers = {'User-Agent': user_agent})
+                  yield scrapy.Request(url=page, callback=self.parse_link)
 
 
 
@@ -38,7 +37,7 @@ class AlonhadatSpider(scrapy.Spider):
                   link = response.css(str).extract_first()
                   link = 'https://alonhadat.com.vn/' + link
 
-                  yield scrapy.Request(url=link, callback=self.parse, headers = {'User-Agent': random.choice(user_agents)})
+                  yield scrapy.Request(url=link, callback=self.parse)
       def parse(self, response, **kwargs):
             item = AlonhdatItem()
             price = response.css('#left > div.property > div.moreinfor > span.price > span.value::text').extract_first()
@@ -79,8 +78,8 @@ class AlonhadatSpider(scrapy.Spider):
             item["direction"] = direction
             item["street_width"] = street_width
             # nếu post_dâte là hôm nay hoặc hôm qua thì mới lấy thông tin
-            if item['post_date'] == today:
-                  data, count = self.supabase.table("entries").insert(item.to_dict()).execute()
+            # if item['post_date'] == today:
+            data, count = self.supabase.table("alonhadat").insert(item.to_dict()).execute()
       
             yield item
 
@@ -110,7 +109,6 @@ def format_value(value):
 
 
       
-
 
 
 

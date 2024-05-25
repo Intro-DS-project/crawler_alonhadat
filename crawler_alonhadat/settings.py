@@ -20,42 +20,81 @@ NEWSPIDER_MODULE = "crawler_alonhadat.spiders"
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+# CONCURRENT_REQUESTS = 4
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+# COOKIES_ENABLED = False
 
+# Retry many times since proxies often fail
+# RETRY_TIMES = 10
+
+
+# Proxy list containing entries like
+# http://username:password@ip:port
+# PROXY_LIST = [
+#     '188.74.210.207:6286:sxwgbmxt:3e2ws8klwh3r',
+#     '188.74.183.10:8279:sxwgbmxt:3e2ws8klwh3r',
+#     '188.74.210.21:6100:sxwgbmxt:3e2ws8klwh3r',
+#     '45.155.68.129:8133:sxwgbmxt:3e2ws8klwh3r',
+#     '154.95.36.199:6893:sxwgbmxt:3e2ws8klwh3r',
+#     '45.94.47.66:8110:sxwgbmxt:3e2ws8klwh3r'
+# ]
+
+
+# Proxy mode
+# 0 = Every requests have different proxy
+# 1 = Take only one proxy from the list and use it
+# 2 = Put a custom proxy to use in the settings
+# PROXY_MODE = 0
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-# DEFAULT_REQUEST_HEADERS = {
-#    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-#    "Accept-Language": "en",
-# }
+DEFAULT_REQUEST_HEADERS = {
+   "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+   "Accept-Language": "en",
+}
+
+
+USER_AGENT_LIST = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36'
+]
+
+
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
+# SPIDER_MIDDLEWARES = {
 #    "crawler_alonhadat.middlewares.CrawlerAlonhadatSpiderMiddleware": 543,
-#}
+# }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
+# DOWNLOADER_MIDDLEWARES = {
+#       'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
 #    "crawler_alonhadat.middlewares.CrawlerAlonhadatDownloaderMiddleware": 543,
-#}
-DOWNLOADER_MIDDLEWARES = {
-   "crawler_alonhadat.middlewares.CheckAuthenticationCloseSpider": 720,
-}
+# }
+
+
+# DOWNLOADER_MIDDLEWARES = {
+#     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+#     'crawler_alonhadat.middlewares.RandomUserAgentMiddleware': 400,
+#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+#     'crawler_alonhadat.middlewares.ProxyMiddleware': 100,
+#        "crawler_alonhadat.middlewares.CrawlerAlonhadatDownloaderMiddleware": 543
+# }
+
+
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html

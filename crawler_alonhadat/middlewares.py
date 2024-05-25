@@ -57,6 +57,10 @@ class CrawlerAlonhadatSpiderMiddleware:
         spider.logger.info("Spider opened: %s" % spider.name)
 
 
+from w3lib.http import basic_auth_header
+import random
+
+
 class CrawlerAlonhadatDownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
@@ -79,7 +83,18 @@ class CrawlerAlonhadatDownloaderMiddleware:
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+        # proxy = random.choice(proxyPools).split(":")
+        # httpsProxy = proxy[0]
+        # portProxy = proxy[1]
+        # usernameProxy = proxy[2]
+        # passwordProxy = proxy[3]
+
+        # print("connect to proxy {}".format(proxy))
+
+        # request.meta['proxy'] = "http://" + httpsProxy + ":" + portProxy
+        # request.headers['Proxy-Authorization'] = basic_auth_header(usernameProxy, passwordProxy) 
         return None
+
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
@@ -105,8 +120,55 @@ class CrawlerAlonhadatDownloaderMiddleware:
 
 
 
-class CheckAuthenticationCloseSpider:
-    def process_response(self, request, response, spider):
-        if "xac-thuc-nguoi-dung.html" in response.url:
-            raise CloseSpider("Authentication required")
-        return response
+# class CheckAuthenticationCloseSpider:
+#     def process_response(self, request, response, spider):
+#         if "xac-thuc-nguoi-dung.html" in response.url:
+#             raise CloseSpider("Authentication required")
+#         return response
+
+class RandomUserAgentMiddleware(object):
+    def __init__(self, user_agent_list):
+        self.user_agent_list = user_agent_list
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            user_agent_list=crawler.settings.get('USER_AGENT_LIST')
+        )
+
+    def process_request(self, request, spider):
+        request.headers['User-Agent'] = random.choice(self.user_agent_list)
+
+# class ProxyMiddleware(object):
+#     def __init__(self, proxy_list, proxy_mode, custom_proxy):
+#         self.proxy_list = proxy_list
+#         self.proxy_mode = proxy_mode
+#         self.custom_proxy = custom_proxy
+
+#     @classmethod
+#     def from_crawler(cls, crawler):
+#         return cls(
+#             proxy_list=crawler.settings.get('PROXY_LIST'),
+#             proxy_mode=crawler.settings.get('PROXY_MODE'),
+#             custom_proxy=crawler.settings.get('CUSTOM_PROXY')
+#         )
+
+#     def process_request(self, request, spider):
+#         if self.proxy_mode == 0:
+#             proxy = random.choice(self.proxy_list)
+#         elif self.proxy_mode == 1:
+#             proxy = self.proxy_list[0]
+#         elif self.proxy_mode == 2:
+#             proxy = self.custom_proxy
+#         else:
+#             proxy = None
+
+#         if proxy:
+#             # Tách các phần của proxy
+#             parts = proxy.split(':')
+#             if len(parts) == 4:
+#                 ip_port = f"{parts[0]}:{parts[1]}"
+#                 username_password = f"{parts[2]}:{parts[3]}"
+#                 request.meta['proxy'] = f"http://{username_password}@{ip_port}"
+#             else:
+#                 spider.logger.error(f"Invalid proxy format: {proxy}")
